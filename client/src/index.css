@@ -1,0 +1,300 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ═══════════════════════════════════════════════════
+   THEME: DARK  (default)
+   Deep charcoal — zero eye strain at night
+═══════════════════════════════════════════════════ */
+:root,
+[data-theme="dark"] {
+  /* Backgrounds */
+  --bg-base:     #09090B;
+  --bg-surface:  #0C0C0F;
+  --bg-elevated: #111113;
+  --bg-overlay:  #151518;
+  --bg-subtle:   #1A1A1E;
+
+  /* Borders */
+  --border:        #27272A;
+  --border-subtle: #1F1F23;
+  --border-strong: #3F3F46;
+
+  /* Text */
+  --text-primary:   #FAFAFA;
+  --text-secondary: #A1A1AA;
+  --text-muted:     #71717A;
+  --text-disabled:  #52525B;
+
+  /* Accent — Electric Indigo */
+  --accent:       #6366F1;
+  --accent-hover: #818CF8;
+  --accent-muted: #312E81;
+  --accent-subtle:#1E1B4B;
+  --accent-rgb:   99, 102, 241;
+
+  /* Status */
+  --success:       #22C55E;
+  --success-subtle:#14532D;
+  --success-fg:    #DCFCE7;
+  --warning:       #F59E0B;
+  --warning-subtle:#78350F;
+  --warning-fg:    #FEF3C7;
+  --danger:        #EF4444;
+  --danger-subtle: #7F1D1D;
+  --danger-fg:     #FEE2E2;
+  --info:          #3B82F6;
+  --info-subtle:   #1E3A5F;
+  --info-fg:       #DBEAFE;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.5);
+  --shadow:    0 2px 8px 0 rgba(0,0,0,0.6);
+  --shadow-md: 0 4px 16px 0 rgba(0,0,0,0.7);
+  --shadow-lg: 0 8px 32px 0 rgba(0,0,0,0.8);
+
+  /* Scrollbar */
+  --scrollbar-track: #0C0C0F;
+  --scrollbar-thumb: #3F3F46;
+
+  color-scheme: dark;
+}
+
+/* ═══════════════════════════════════════════════════
+   THEME: LIGHT
+   Warm near-white — comfortable, not clinical
+   (#FAFAFA base avoids the harsh glare of pure white)
+═══════════════════════════════════════════════════ */
+[data-theme="light"] {
+  --bg-base:     #FAFAFA;
+  --bg-surface:  #FFFFFF;
+  --bg-elevated: #F4F4F5;
+  --bg-overlay:  #EBEBEC;
+  --bg-subtle:   #E4E4E7;
+
+  --border:        #E4E4E7;
+  --border-subtle: #F0F0F1;
+  --border-strong: #C4C4C8;
+
+  --text-primary:   #18181B;
+  --text-secondary: #3F3F46;
+  --text-muted:     #71717A;
+  --text-disabled:  #A1A1AA;
+
+  --accent:       #4F46E5;
+  --accent-hover: #6366F1;
+  --accent-muted: #C7D2FE;
+  --accent-subtle:#EEF2FF;
+  --accent-rgb:   79, 70, 229;
+
+  --success:       #16A34A;
+  --success-subtle:#DCFCE7;
+  --success-fg:    #14532D;
+  --warning:       #D97706;
+  --warning-subtle:#FEF3C7;
+  --warning-fg:    #78350F;
+  --danger:        #DC2626;
+  --danger-subtle: #FEE2E2;
+  --danger-fg:     #7F1D1D;
+  --info:          #2563EB;
+  --info-subtle:   #DBEAFE;
+  --info-fg:       #1E3A5F;
+
+  --shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.05);
+  --shadow:    0 2px 8px 0 rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 16px 0 rgba(0,0,0,0.10);
+  --shadow-lg: 0 8px 32px 0 rgba(0,0,0,0.14);
+
+  --scrollbar-track: #F4F4F5;
+  --scrollbar-thumb: #C4C4C8;
+
+  color-scheme: light;
+}
+
+/* ═══════════════════════════════════════════════════
+   THEME: SOLARIZED LIGHT
+   Ethan Schoonover's Solarized — warm sepia tones
+   scientifically designed for low eye strain
+═══════════════════════════════════════════════════ */
+[data-theme="solarized"] {
+  --bg-base:     #FDF6E3;  /* base3  — main background    */
+  --bg-surface:  #EEE8D5;  /* base2  — surface            */
+  --bg-elevated: #E5DECA;  /* lighter base2               */
+  --bg-overlay:  #DDD5B8;  /* accent background           */
+  --bg-subtle:   #D3CAA8;  /* subtle overlay              */
+
+  --border:        #C5BEA4;
+  --border-subtle: #D8D1BB;
+  --border-strong: #A8A190;
+
+  --text-primary:   #073642;  /* base03 — strongest text  */
+  --text-secondary: #586E75;  /* base01 — body copy       */
+  --text-muted:     #839496;  /* base0  — secondary copy  */
+  --text-disabled:  #93A1A1;  /* base1  — comments        */
+
+  /* Solarized blue — harmonious accent on warm bg */
+  --accent:       #268BD2;
+  --accent-hover: #1E7BBF;
+  --accent-muted: #B8D8F0;
+  --accent-subtle:#E0EFF8;
+  --accent-rgb:   38, 139, 210;
+
+  --success:       #859900;  /* solarized green  */
+  --success-subtle:#EEF2D5;
+  --success-fg:    #4A5500;
+  --warning:       #B58900;  /* solarized yellow */
+  --warning-subtle:#FDF3C8;
+  --warning-fg:    #6B5000;
+  --danger:        #DC322F;  /* solarized red    */
+  --danger-subtle: #FAE0DF;
+  --danger-fg:     #8B1010;
+  --info:          #268BD2;
+  --info-subtle:   #D6EAF8;
+  --info-fg:       #0D4C78;
+
+  --shadow-sm: 0 1px 2px 0 rgba(7,54,66,0.06);
+  --shadow:    0 2px 8px 0 rgba(7,54,66,0.10);
+  --shadow-md: 0 4px 16px 0 rgba(7,54,66,0.12);
+  --shadow-lg: 0 8px 32px 0 rgba(7,54,66,0.16);
+
+  --scrollbar-track: #EEE8D5;
+  --scrollbar-thumb: #A8A190;
+
+  color-scheme: light;
+}
+
+/* ═══════════════════════════════════════════════════
+   GLOBAL THEME TRANSITION — smooth, not jarring
+═══════════════════════════════════════════════════ */
+*,
+*::before,
+*::after {
+  transition:
+    background-color 0.22s ease,
+    border-color     0.22s ease,
+    color            0.18s ease,
+    box-shadow       0.22s ease;
+}
+
+/* Exclude transitions on interactive elements that need instant feedback */
+button, a, input, select, textarea {
+  transition:
+    background-color 0.15s ease,
+    border-color     0.15s ease,
+    color            0.15s ease,
+    box-shadow       0.15s ease,
+    opacity          0.15s ease,
+    transform        0.15s ease;
+}
+
+/* ─── Base Reset ─── */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-bg-base text-text-primary font-sans antialiased;
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar       { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--scrollbar-track); }
+  ::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 9999px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+  /* Focus styles */
+  :focus-visible {
+    @apply outline-none ring-1 ring-accent ring-offset-1 ring-offset-bg-base;
+  }
+
+  /* Selection */
+  ::selection {
+    background: var(--accent-subtle);
+    color: var(--text-primary);
+  }
+}
+
+/* ─── Component Layer ─── */
+@layer components {
+  .input-base {
+    @apply w-full bg-bg-elevated border border-border text-text-primary placeholder-text-muted
+           rounded px-3 py-2 text-sm
+           focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent;
+    transition: border-color 0.15s, box-shadow 0.15s, background-color 0.15s;
+  }
+
+  .card {
+    @apply bg-bg-surface border border-border rounded-lg;
+  }
+
+  .stat-card {
+    @apply card p-5;
+  }
+
+  .table-base {
+    @apply w-full text-sm text-left;
+  }
+  .table-base thead tr {
+    @apply border-b border-border;
+  }
+  .table-base thead th {
+    @apply py-3 px-4 text-text-muted font-medium text-xs uppercase tracking-wider;
+  }
+  .table-base tbody tr {
+    @apply border-b border-border-subtle hover:bg-bg-elevated;
+    transition: background-color 0.1s;
+  }
+  .table-base tbody td {
+    @apply py-3 px-4 text-text-secondary;
+  }
+
+  .nav-link {
+    @apply flex items-center gap-3 px-3 py-2 rounded text-sm text-text-muted
+           cursor-pointer hover:bg-bg-elevated hover:text-text-primary;
+    transition: background-color 0.15s, color 0.15s;
+  }
+  .nav-link.active {
+    @apply bg-accent-subtle text-accent-hover;
+  }
+
+  .badge {
+    @apply inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium;
+  }
+
+  .page-header {
+    @apply mb-6 pb-4 border-b border-border;
+  }
+}
+
+/* ─── Utility Layer ─── */
+@layer utilities {
+  .text-gradient {
+    background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .divider {
+    @apply border-t border-border my-4;
+  }
+
+  .glass {
+    backdrop-filter: blur(12px);
+    background: rgba(var(--bg-surface), 0.8);
+  }
+}
