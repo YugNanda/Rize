@@ -7,12 +7,15 @@ dist/
 dist-ssr/
 client/dist/
 
-# Environment variables & secrets
+# Environment variables & secrets (server secrets protected)
 .env
 .env.*
 !.env.example
+!client/.env.example
+!client/.env.production
 *.env
 server/.env
+server/.env.*
 
 # Uploads & temporary files
 server/uploads/resumes/*
