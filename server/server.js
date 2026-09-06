@@ -93,13 +93,45 @@ app.use('/api/applications', applicationRoutes);
 app.use('/api/interviews', interviewRoutes);
 app.use('/api/notifications', notificationRoutes);
 
+// Root Welcome Endpoint
+app.get('/', (req, res) => {
+  res.json({
+    success: true,
+    name: 'Rize Placement & Internship Management API',
+    status: 'online',
+    version: '1.0.0',
+    environment: process.env.NODE_ENV || 'production',
+    endpoints: {
+      health: '/api/health',
+      auth: '/api/auth',
+      students: '/api/students',
+      companies: '/api/companies',
+      drives: '/api/drives',
+      applications: '/api/applications',
+      interviews: '/api/interviews',
+      notifications: '/api/notifications',
+    },
+    message: 'Welcome to Rize API. Backend services are fully operational.',
+  });
+});
+
+// API Gateway Welcome Endpoint
+app.get('/api', (req, res) => {
+  res.json({
+    success: true,
+    message: 'Rize API Gateway is active and healthy.',
+    health: '/api/health',
+    version: '1.0.0',
+  });
+});
+
 // Health check
 app.get('/api/health', (req, res) => {
-  res.json({ success: true, message: 'Rize API is running.', env: process.env.NODE_ENV });
+  res.json({ success: true, message: 'Rize API is running.', env: process.env.NODE_ENV || 'production' });
 });
 
 // 404 handler for unknown routes
-app.use('/{*splat}', (req, res) => {
+app.use((req, res) => {
   res.status(404).json({ success: false, message: `Route ${req.originalUrl} not found.` });
 });
 
