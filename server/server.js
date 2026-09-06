@@ -28,7 +28,7 @@ app.use(
   })
 );
 
-// CORS — support multiple production & staging URLs via comma-separated CLIENT_URL
+// CORS — dynamic reflection ensures credentials: true works seamlessly across all Vercel domains
 const allowedOrigins = (process.env.CLIENT_URL || 'http://localhost:5173')
   .split(',')
   .map(o => o.trim())
@@ -37,15 +37,19 @@ const allowedOrigins = (process.env.CLIENT_URL || 'http://localhost:5173')
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin) || process.env.NODE_ENV !== 'production') {
-        return callback(null, true);
+      // If no origin (e.g. mobile/same-origin/curl) or allowed or wildcard, allow and reflect origin
+      if (!origin || allowedOrigins.includes('*') || allowedOrigins.includes(origin)) {
+        return callback(null, origin || true);
       }
-      // In production, allow origin if it matches allowed domains
-      return callback(null, true);
+      // Allow Vercel preview & production domains automatically
+      if (origin && (origin.endsWith('.vercel.app') || origin.includes('localhost'))) {
+        return callback(null, origin);
+      }
+      return callback(null, origin || true);
     },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
   })
 );
 
