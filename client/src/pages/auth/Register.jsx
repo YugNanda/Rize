@@ -65,7 +65,7 @@ const Register = () => {
     try {
       const { confirmPassword, ...payload } = data;
       const res = await authService.register(payload);
-      login(res.data.user);
+      login(res.data.user, res.data.token);
       toast.success('Welcome to Rize! Your account is ready.');
       const dashMap = {
         student: '/student/dashboard',

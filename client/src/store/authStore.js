@@ -10,22 +10,24 @@ export const useAuthStore = create(
   persist(
     (set) => ({
       user: null,
+      token: null,
       isAuthenticated: false,
       isLoading: false,
 
       setUser: (user) => set({ user, isAuthenticated: !!user }),
 
-      login: (user) => set({ user, isAuthenticated: true }),
+      login: (user, token) => set({ user, token: token || null, isAuthenticated: true }),
 
-      clearAuth: () => set({ user: null, isAuthenticated: false }),
+      clearAuth: () => set({ user: null, token: null, isAuthenticated: false }),
 
       setLoading: (isLoading) => set({ isLoading }),
     }),
     {
       name: 'rize-auth-session',
-      storage: createJSONStorage(() => sessionStorage),
+      storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         user: state.user,
+        token: state.token,
         isAuthenticated: state.isAuthenticated,
       }),
     }

@@ -157,7 +157,7 @@ const Login = () => {
   const onSubmit = async (data) => {
     try {
       const res = await authService.login(data);
-      login(res.data.user);
+      login(res.data.user, res.data.token);
       toast.success(`Welcome back, ${res.data.user.name}!`);
       const from = location.state?.from?.pathname;
       const dashMap = {

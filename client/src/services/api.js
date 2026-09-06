@@ -9,6 +9,18 @@ const api = axios.create({
   },
 });
 
+// Request interceptor — attach JWT Bearer token if available
+api.interceptors.request.use(
+  (config) => {
+    const token = useAuthStore.getState().token;
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
 // Response interceptor — handle 401 globally (but NOT on auth routes)
 api.interceptors.response.use(
   (response) => response,

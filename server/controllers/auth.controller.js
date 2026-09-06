@@ -87,10 +87,11 @@ const signTokenAndRespond = async (res, user, statusCode, message) => {
     expiresIn: process.env.JWT_EXPIRES_IN || '7d',
   });
 
+  const isProd = process.env.NODE_ENV === 'production';
   const cookieOptions = {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
+    secure: isProd,
+    sameSite: isProd ? 'none' : 'lax',
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
   };
 
@@ -180,10 +181,12 @@ const login = async (req, res, next) => {
 
 // POST /api/auth/logout
 const logout = (req, res) => {
+  const isProd = process.env.NODE_ENV === 'production';
   res.cookie('token', '', {
     httpOnly: true,
     expires: new Date(0),
-    sameSite: 'lax',
+    secure: isProd,
+    sameSite: isProd ? 'none' : 'lax',
   });
   return sendSuccess(res, 200, 'Logged out successfully.');
 };
