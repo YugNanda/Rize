@@ -18,8 +18,21 @@ const notificationRoutes = require('./routes/notification.routes');
 
 const app = express();
 
-// Connect to MongoDB
-connectDB();
+// Ensure MongoDB connection before handling requests in serverless environments
+app.use(async (req, res, next) => {
+  if (req.path === '/api/health') return next();
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    console.error('Database connection error:', err.message);
+    res.status(500).json({
+      success: false,
+      message: 'Database connection failed. Please ensure MongoDB Atlas Network Access has 0.0.0.0/0 enabled.',
+      error: err.message,
+    });
+  }
+});
 
 // Security headers (allowing cross-origin for static assets like PDFs & logos)
 app.use(
