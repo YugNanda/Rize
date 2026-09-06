@@ -1,3 +1,5 @@
+const path = require('path');
+const fs = require('fs');
 const Student = require('../models/Student.model');
 const User = require('../models/User.model');
 const { sendSuccess, sendError } = require('../utils/response');
@@ -61,20 +63,62 @@ const updateProfile = async (req, res, next) => {
 
 /**
  * POST /api/students/resume
- * Upload resume PDF — multer handles actual upload
+ * Upload resume PDF (stored in MongoDB for serverless durability)
  */
 const uploadResume = async (req, res, next) => {
   try {
     if (!req.file) return sendError(res, 400, 'No resume file provided.');
 
-    const resumeUrl = `/uploads/resumes/${req.file.filename}`;
-    const student = await Student.findOneAndUpdate(
-      { userId: req.user.id },
-      { resumeUrl, resumeFileName: req.file.originalname },
-      { new: true, upsert: true }
-    ).populate('userId', 'name email role avatar');
+    let student = await Student.findOne({ userId: req.user.id });
+    if (!student) {
+      student = new Student({ userId: req.user.id });
+    }
 
-    sendSuccess(res, 200, 'Resume uploaded.', { student });
+    const resumeBase64 = req.file.buffer.toString('base64');
+    const resumeMimeType = req.file.mimetype || 'application/pdf';
+    const resumeFileName = req.file.originalname || 'resume.pdf';
+    const resumeUrl = `/api/students/${student._id}/resume`;
+
+    student.resumeUrl = resumeUrl;
+    student.resumeFileName = resumeFileName;
+    student.resumeData = resumeBase64;
+    student.resumeMimeType = resumeMimeType;
+    await student.save();
+
+    await student.populate('userId', 'name email role avatar');
+
+    sendSuccess(res, 200, 'Resume uploaded successfully.', { student });
+  } catch (err) {
+    next(err);
+  }
+};
+
+/**
+ * GET /api/students/:id/resume
+ * Stream student's resume PDF
+ */
+const getStudentResume = async (req, res, next) => {
+  try {
+    const student = await Student.findById(req.params.id).select('+resumeData');
+    if (!student || !student.resumeData) {
+      if (student && student.resumeUrl && student.resumeUrl.startsWith('/uploads/')) {
+        const filePath = path.join(__dirname, '..', student.resumeUrl);
+        if (fs.existsSync(filePath)) {
+          return res.sendFile(filePath);
+        }
+      }
+      return sendError(res, 404, 'Resume not found.');
+    }
+
+    const fileBuffer = Buffer.from(student.resumeData, 'base64');
+    res.set({
+      'Content-Type': student.resumeMimeType || 'application/pdf',
+      'Content-Disposition': `inline; filename="${encodeURIComponent(student.resumeFileName || 'resume.pdf')}"`,
+      'Content-Length': fileBuffer.length,
+      'Cache-Control': 'public, max-age=86400',
+    });
+
+    return res.end(fileBuffer);
   } catch (err) {
     next(err);
   }
@@ -88,7 +132,7 @@ const uploadPhoto = async (req, res, next) => {
   try {
     if (!req.file) return sendError(res, 400, 'No photo provided.');
 
-    const profilePhotoUrl = `/uploads/photos/${req.file.filename}`;
+    const profilePhotoUrl = `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`;
     const student = await Student.findOneAndUpdate(
       { userId: req.user.id },
       { profilePhotoUrl },
@@ -202,6 +246,7 @@ module.exports = {
   getMyProfile,
   updateProfile,
   uploadResume,
+  getStudentResume,
   uploadPhoto,
   getStudentById,
   getAllStudents,

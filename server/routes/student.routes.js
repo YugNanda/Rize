@@ -3,13 +3,16 @@ const { protect } = require('../middleware/auth.middleware');
 const { authorize } = require('../middleware/rbac.middleware');
 const { uploadResume: multerResume, uploadPhoto: multerPhoto } = require('../middleware/upload.middleware');
 const {
-  getMyProfile, updateProfile, uploadResume, uploadPhoto,
+  getMyProfile, updateProfile, uploadResume, getStudentResume, uploadPhoto,
   getStudentById, getAllStudents, verifyStudent, issueStudentNoc,
 } = require('../controllers/student.controller');
 
 const router = express.Router();
 
-// All student routes require authentication
+// Public streaming endpoint for student resume PDF (supports <iframe>, preview modal & direct downloads)
+router.get('/:id/resume', getStudentResume);
+
+// All subsequent student routes require authentication
 router.use(protect);
 
 // Student's own profile

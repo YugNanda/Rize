@@ -79,6 +79,15 @@ const studentSchema = new mongoose.Schema(
       type: String,
       default: '',
     },
+    resumeData: {
+      type: String,
+      select: false,
+      default: '',
+    },
+    resumeMimeType: {
+      type: String,
+      default: 'application/pdf',
+    },
     profilePhotoUrl: {
       type: String,
       default: '',

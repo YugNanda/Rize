@@ -1,49 +1,7 @@
 const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
 
-const ensureDir = (dir) => {
-  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-};
-
-// Storage for resumes
-const resumeStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const dir = path.join(__dirname, '../uploads/resumes');
-    ensureDir(dir);
-    cb(null, dir);
-  },
-  filename: (req, file, cb) => {
-    const ext = path.extname(file.originalname);
-    cb(null, `resume_${req.user.id}_${Date.now()}${ext}`);
-  },
-});
-
-// Storage for profile photos
-const photoStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const dir = path.join(__dirname, '../uploads/photos');
-    ensureDir(dir);
-    cb(null, dir);
-  },
-  filename: (req, file, cb) => {
-    const ext = path.extname(file.originalname);
-    cb(null, `photo_${req.user.id}_${Date.now()}${ext}`);
-  },
-});
-
-// Storage for company logos
-const logoStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const dir = path.join(__dirname, '../uploads/logos');
-    ensureDir(dir);
-    cb(null, dir);
-  },
-  filename: (req, file, cb) => {
-    const ext = path.extname(file.originalname);
-    cb(null, `logo_${Date.now()}${ext}`);
-  },
-});
+// Use memoryStorage for serverless execution (zero disk write dependency)
+const memoryStorage = multer.memoryStorage();
 
 const pdfFilter = (req, file, cb) => {
   if (file.mimetype === 'application/pdf') return cb(null, true);
@@ -56,19 +14,19 @@ const imageFilter = (req, file, cb) => {
 };
 
 const uploadResume = multer({
-  storage: resumeStorage,
+  storage: memoryStorage,
   fileFilter: pdfFilter,
   limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
 });
 
 const uploadPhoto = multer({
-  storage: photoStorage,
+  storage: memoryStorage,
   fileFilter: imageFilter,
   limits: { fileSize: 2 * 1024 * 1024 }, // 2MB
 });
 
 const uploadLogo = multer({
-  storage: logoStorage,
+  storage: memoryStorage,
   fileFilter: imageFilter,
   limits: { fileSize: 2 * 1024 * 1024 },
 });

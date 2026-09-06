@@ -53,12 +53,14 @@ const uploadLogo = async (req, res, next) => {
   try {
     if (!req.file) return sendError(res, 400, 'No logo file provided.');
 
-    const logoUrl = `/uploads/logos/${req.file.filename}`;
+    const logoUrl = `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`;
     const company = await Company.findOneAndUpdate(
       { createdBy: req.user.id },
       { logoUrl },
       { new: true, upsert: true }
     );
+
+    await User.findByIdAndUpdate(req.user.id, { avatar: logoUrl });
 
     sendSuccess(res, 200, 'Logo uploaded.', { company });
   } catch (err) {
