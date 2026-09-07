@@ -13,6 +13,7 @@ import {
   BarChart3,
   Zap,
   ChevronRight,
+  X,
 } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
 import { driveService, notificationService } from '../../services/dataService';
@@ -52,7 +53,7 @@ const navConfig = {
 };
 
 
-const Sidebar = () => {
+const Sidebar = ({ onClose }) => {
   const { user } = useAuthStore();
   const nav = navConfig[user?.role] || [];
   const [counts, setCounts] = useState({ pendingDrives: 0, openDrives: 0, newDrives: 0 });
@@ -122,6 +123,9 @@ const Sidebar = () => {
     if (to.includes('/notifications')) {
       setUnreadNotifs(0);
     }
+    if (onClose) {
+      onClose();
+    }
   };
 
   const renderBadge = (to) => {
@@ -182,10 +186,22 @@ const Sidebar = () => {
     <aside className="w-56 shrink-0 bg-bg-surface border-r border-border flex flex-col h-screen sticky top-0">
       {/* Logo */}
       <div className="flex items-center justify-between px-4 h-14 border-b border-border shrink-0">
-        <RizeLogo size="sm" />
-        <span className="text-2xs font-semibold px-2 py-0.5 rounded bg-accent/15 border border-accent/30 text-accent">
-          {user?.role === 'tpcell' || user?.role === 'admin' ? 'T&P Cell' : user?.role}
-        </span>
+        <div className="flex items-center gap-2">
+          <RizeLogo size="sm" />
+          <span className="text-2xs font-semibold px-2 py-0.5 rounded bg-accent/15 border border-accent/30 text-accent">
+            {user?.role === 'tpcell' || user?.role === 'admin' ? 'T&P Cell' : user?.role}
+          </span>
+        </div>
+        {onClose && (
+          <button
+            type="button"
+            onClick={onClose}
+            className="p-1 rounded-lg text-text-muted hover:text-text-primary hover:bg-bg-elevated md:hidden cursor-pointer"
+            aria-label="Close navigation"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        )}
       </div>
 
       {/* Navigation */}
@@ -211,6 +227,7 @@ const Sidebar = () => {
         <div
           onClick={() => {
             if (user?.role === 'student') navigate('/student/profile');
+            if (onClose) onClose();
           }}
           className="flex items-center gap-2.5 px-2 py-2 rounded-xl hover:bg-bg-elevated cursor-pointer transition-all"
         >

@@ -65,7 +65,7 @@ export default function DriveDetail() {
         <ArrowLeft size={16} /> Back to drives
       </button>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: '1.25rem', alignItems: 'start' }}>
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-5 items-start">
         {/* ── Main content ── */}
         <div>
           {/* Company header */}

@@ -292,7 +292,7 @@ export default function StudentProfile() {
             <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', margin: '2px 0 0' }}>PDF · Max 5MB · Required to apply to drives</p>
           </div>
         </div>
-        <div style={{ display: 'flex', gap: '0.75rem' }}>
+        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
           {profile.resumeUrl && (
             <button
               onClick={() => setShowResumePreview(true)}

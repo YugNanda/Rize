@@ -178,7 +178,7 @@ export default function StudentDrives() {
 
       {/* Grid */}
       {loading ? (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(320px,1fr))', gap: '1rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(min(100%, 280px),1fr))', gap: '1rem' }}>
           {[...Array(6)].map((_, i) => <div key={i} className="sk" />)}
         </div>
       ) : drives.length === 0 ? (
@@ -188,7 +188,7 @@ export default function StudentDrives() {
           <p style={{ fontSize: '0.875rem', marginTop: 4 }}>Try adjusting your filters</p>
         </div>
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(320px,1fr))', gap: '1rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(min(100%, 280px),1fr))', gap: '1rem' }}>
           {drives.map(d => (
             <DriveCard key={d._id} drive={d} onClick={() => navigate(`/student/drives/${d._id}`)} />
           ))}

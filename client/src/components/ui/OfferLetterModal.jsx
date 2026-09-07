@@ -61,23 +61,29 @@ export default function OfferLetterModal({
       {/* Print Stylesheet to ensure pristine A4 PDF export */}
       <style>{`
         @media print {
+          @page {
+            size: A4 portrait;
+            margin: 10mm 12mm 10mm 12mm;
+          }
           body * {
-            visibility: hidden;
+            visibility: hidden !important;
           }
           #printable-offer-letter, #printable-offer-letter * {
-            visibility: visible;
+            visibility: visible !important;
           }
           #printable-offer-letter {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100%;
-            margin: 0;
-            padding: 24px;
+            position: fixed !important;
+            left: 0 !important;
+            top: 0 !important;
+            width: 100% !important;
+            margin: 0 !important;
+            padding: 16px !important;
             background: white !important;
-            color: black !important;
+            color: #111827 !important;
             border: none !important;
             box-shadow: none !important;
+            font-size: 11pt !important;
+            line-height: 1.35 !important;
           }
           .no-print {
             display: none !important;
@@ -87,29 +93,37 @@ export default function OfferLetterModal({
 
       <div className="bg-bg-surface border border-border rounded-2xl w-full max-w-3xl shadow-2xl overflow-hidden my-auto flex flex-col max-h-[92vh]">
         {/* Modal Toolbar (hidden in print) */}
-        <div className="px-5 py-3.5 border-b border-border bg-bg-elevated/80 flex items-center justify-between gap-3 shrink-0 no-print">
-          <div className="flex items-center gap-2.5 min-w-0">
+        <div className="px-3 sm:px-5 py-3 border-b border-border bg-bg-elevated/80 flex items-center justify-between gap-2 sm:gap-3 shrink-0 no-print">
+          <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
             <div className="w-8 h-8 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 flex items-center justify-center shrink-0">
               <Award size={18} />
             </div>
             <div className="min-w-0">
-              <h3 className="text-sm font-bold text-text-primary truncate">
-                Corporate Offer Letter & Appointment Order
+              <h3 className="text-xs sm:text-sm font-bold text-text-primary truncate">
+                Corporate Offer Letter
               </h3>
-              <p className="text-3xs text-text-muted truncate">
-                Official Campus Placement Document · {companyName}
+              <p className="text-3xs text-text-muted truncate hidden sm:block">
+                Official Placement Document · {companyName}
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
             <button
               onClick={handlePrint}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-accent text-white hover:bg-accent-hover transition-all cursor-pointer shadow-sm"
-              title="Print or Save as PDF"
+              className="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg text-2xs sm:text-xs font-semibold bg-emerald-600 text-white hover:bg-emerald-500 transition-all cursor-pointer shadow-sm"
+              title="Save or download as PDF"
+            >
+              <Download size={13} />
+              <span>Download PDF</span>
+            </button>
+            <button
+              onClick={handlePrint}
+              className="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg text-2xs sm:text-xs font-semibold bg-accent text-white hover:bg-accent-hover transition-all cursor-pointer shadow-sm"
+              title="Print document"
             >
               <Printer size={13} />
-              <span>Download PDF</span>
+              <span className="hidden sm:inline">Print</span>
             </button>
             <button
               onClick={onClose}
@@ -224,8 +238,9 @@ export default function OfferLetterModal({
                 Annexure A: Annual Remuneration & Compensation Breakdown
               </h4>
 
-              <div className="border border-neutral-200 rounded-lg overflow-hidden text-xs">
-                <div className="bg-neutral-100 font-bold text-neutral-800 px-3 py-2 grid grid-cols-3 border-b border-neutral-200">
+              <div className="border border-neutral-200 rounded-lg overflow-x-auto text-xs">
+                <div className="min-w-[460px]">
+                  <div className="bg-neutral-100 font-bold text-neutral-800 px-3 py-2 grid grid-cols-3 border-b border-neutral-200">
                   <span>Component</span>
                   <span className="text-center">Monthly Equivalent</span>
                   <span className="text-right">Annual Valuation (INR)</span>
@@ -251,6 +266,7 @@ export default function OfferLetterModal({
                   <span className="text-right font-mono text-emerald-700 font-black">₹{packageLpa.toFixed(2)} LPA</span>
                 </div>
               </div>
+            </div>
             </div>
 
             {/* Terms of Employment */}
@@ -312,17 +328,24 @@ export default function OfferLetterModal({
         </div>
 
         {/* Modal Bottom Footer (hidden in print) */}
-        <div className="px-5 py-3 border-t border-border bg-bg-elevated/70 flex items-center justify-between gap-3 text-xs text-text-muted shrink-0 no-print">
-          <span className="text-3xs sm:text-2xs truncate">
-            Official PDF can be printed or saved via browser dialog.
+        <div className="px-3 sm:px-5 py-3 border-t border-border bg-bg-elevated/70 flex flex-wrap items-center justify-between gap-2 sm:gap-3 text-xs text-text-muted shrink-0 no-print">
+          <span className="text-3xs sm:text-2xs truncate hidden sm:inline">
+            Official PDF can be printed or saved directly via browser dialog.
           </span>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2 ml-auto">
             <button
               onClick={handlePrint}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-accent text-white hover:bg-accent-hover transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 text-white hover:bg-emerald-500 transition-colors cursor-pointer"
+            >
+              <Download size={13} />
+              <span>Download PDF</span>
+            </button>
+            <button
+              onClick={handlePrint}
+              className="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold bg-accent text-white hover:bg-accent-hover transition-colors cursor-pointer"
             >
               <Printer size={13} />
-              <span>Print / Save PDF</span>
+              <span>Print Letter</span>
             </button>
             <button
               onClick={onClose}

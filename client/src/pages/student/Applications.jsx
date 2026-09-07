@@ -97,47 +97,68 @@ export default function StudentApplications() {
           )}
         </div>
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+        <div className="flex flex-col gap-3">
           {apps.map(app => {
             const drive = app.driveId || {};
             const company = drive.companyId || {};
             const sc = statusConfig[app.status] || statusConfig.applied;
 
             return (
-              <div key={app._id} className="app-card" style={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', borderRadius: 14, padding: '1.25rem', display: 'flex', alignItems: 'center', gap: '1rem', cursor: 'pointer' }}
-                onClick={() => navigate(`/student/drives/${drive._id}`)}>
-
-                {/* Logo */}
-                <CompanyLogo name={company.name} logoUrl={company.logoUrl} size="md" />
+              <div
+                key={app._id}
+                className="app-card bg-bg-surface border border-border rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center gap-3.5 sm:gap-4 cursor-pointer hover:border-accent/40 transition-all shadow-sm"
+                onClick={() => navigate(`/student/drives/${drive._id}`)}
+              >
+                {/* Logo & Mobile Header */}
+                <div className="flex items-center gap-3 sm:block shrink-0">
+                  <CompanyLogo name={company.name} logoUrl={company.logoUrl} size="md" className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl" />
+                  <div className="sm:hidden flex-1 min-w-0">
+                    <p className="font-bold text-text-primary text-sm truncate m-0">{drive.title || 'Drive'}</p>
+                    <p className="text-xs text-text-muted truncate m-0">{company.name}</p>
+                  </div>
+                  <span className="sm:hidden text-3xs font-bold px-2 py-0.5 rounded-full shrink-0" style={{ color: sc.color, background: sc.bg }}>
+                    {sc.label}
+                  </span>
+                </div>
 
                 {/* Details */}
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: 4, flexWrap: 'wrap' }}>
-                    <p style={{ fontWeight: 700, color: 'var(--text-primary)', margin: 0, fontSize: '0.9375rem' }}>{drive.title || 'Drive'}</p>
-                    <span style={{ fontSize: '0.6875rem', fontWeight: 700, color: sc.color, background: sc.bg, padding: '0.15rem 0.625rem', borderRadius: 999 }}>{sc.label}</span>
+                <div className="flex-1 min-w-0">
+                  <div className="hidden sm:flex items-center gap-2 mb-1 flex-wrap">
+                    <p className="font-bold text-text-primary text-sm sm:text-base m-0">{drive.title || 'Drive'}</p>
+                    <span className="text-3xs font-bold px-2.5 py-0.5 rounded-full" style={{ color: sc.color, background: sc.bg }}>
+                      {sc.label}
+                    </span>
                   </div>
-                  <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', margin: 0 }}>{company.name} · {drive.location}</p>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginTop: 6, flexWrap: 'wrap' }}>
-                    {drive.package && <span style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'var(--success)' }}>₹{fmt(drive.package.min)}–{fmt(drive.package.max)} LPA</span>}
-                    <span style={{ fontSize: '0.75rem', color: 'var(--text-disabled)' }}>Applied {fmtDate(app.appliedAt)}</span>
+                  <p className="text-xs text-text-muted hidden sm:block m-0">{company.name} · {drive.location}</p>
+                  <p className="text-xs text-text-muted sm:hidden m-0">📍 {drive.location}</p>
+
+                  <div className="flex items-center gap-3 mt-2 flex-wrap">
+                    {drive.package && (
+                      <span className="text-xs font-bold text-emerald-400">
+                        ₹{fmt(drive.package.min)}–{fmt(drive.package.max)} LPA
+                      </span>
+                    )}
+                    <span className="text-3xs text-text-muted">Applied {fmtDate(app.appliedAt)}</span>
                   </div>
 
                   {/* Rejection Reason Alert */}
                   {app.status === 'rejected' && (
-                    <div style={{ marginTop: '0.625rem', padding: '0.5rem 0.75rem', background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.25)', borderRadius: 8, display: 'flex', alignItems: 'flex-start', gap: '0.5rem' }}>
-                      <XCircle size={14} color="#EF4444" style={{ flexShrink: 0, marginTop: 2 }} />
+                    <div className="mt-2.5 p-2.5 bg-rose-500/10 border border-rose-500/25 rounded-xl flex items-start gap-2 text-xs">
+                      <XCircle size={14} className="text-rose-400 shrink-0 mt-0.5" />
                       <div>
-                        <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#EF4444' }}>Reason for Rejection: </span>
-                        <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
+                        <span className="font-bold text-rose-400">Reason for Rejection: </span>
+                        <span className="text-text-secondary">
                           {app.rejectionReason || 'Candidate profile or eligibility criteria did not meet cutoff.'}
                         </span>
                       </div>
                     </div>
                   )}
+
                   {/* Placement Offer Letter & NOC Action Buttons */}
                   {['offered', 'selected'].includes(app.status) && (
-                    <div style={{ marginTop: '0.625rem', display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                    <div className="mt-3 flex items-center gap-2 flex-wrap w-full">
                       <button
+                        type="button"
                         onClick={(e) => {
                           e.stopPropagation();
                           const enrichedApp = {
@@ -145,31 +166,20 @@ export default function StudentApplications() {
                             studentId: {
                               ...(app.studentId || {}),
                               userId: app.studentId?.userId || user || {},
-                            }
+                            },
                           };
                           setOfferModalApp(enrichedApp);
                         }}
-                        style={{
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: '0.375rem',
-                          padding: '0.38rem 0.85rem',
-                          background: 'linear-gradient(135deg, rgba(99,102,241,0.18), rgba(16,185,129,0.18))',
-                          border: '1px solid rgba(16,185,129,0.4)',
-                          color: '#10B981',
-                          borderRadius: 8,
-                          fontSize: '0.75rem',
-                          fontWeight: 700,
-                          cursor: 'pointer',
-                          boxShadow: '0 2px 6px rgba(16,185,129,0.12)',
-                        }}
+                        className="inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-gradient-to-r from-emerald-500/15 via-accent/15 to-emerald-500/20 border border-emerald-500/40 text-emerald-400 rounded-xl text-xs font-bold cursor-pointer shadow-sm hover:from-emerald-500/25 hover:to-emerald-500/30 transition-all w-full sm:w-auto"
                         title="Download and view official Corporate Offer Letter PDF"
                       >
-                        <Award size={13} /> View / Download Offer Letter 📜 (PDF)
+                        <Award size={14} />
+                        <span>View / Download Offer Letter 📜 (PDF)</span>
                       </button>
 
                       {app.nocStatus === 'issued' && (
                         <button
+                          type="button"
                           onClick={(e) => {
                             e.stopPropagation();
                             const enrichedApp = {
@@ -177,33 +187,22 @@ export default function StudentApplications() {
                               studentId: {
                                 ...(app.studentId || {}),
                                 userId: app.studentId?.userId || user || {},
-                              }
+                              },
                             };
                             setNocModalApp(enrichedApp);
                           }}
-                          style={{
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: '0.375rem',
-                            padding: '0.38rem 0.75rem',
-                            background: 'rgba(99,102,241,0.12)',
-                            border: '1px solid rgba(99,102,241,0.3)',
-                            color: '#6366F1',
-                            borderRadius: 8,
-                            fontSize: '0.75rem',
-                            fontWeight: 700,
-                            cursor: 'pointer',
-                          }}
+                          className="inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-accent/15 border border-accent/35 text-accent rounded-xl text-xs font-bold cursor-pointer hover:bg-accent/25 transition-all w-full sm:w-auto"
                           title="View College No Objection Certificate"
                         >
-                          <ShieldCheck size={13} /> College NOC
+                          <ShieldCheck size={14} />
+                          <span>College NOC</span>
                         </button>
                       )}
                     </div>
                   )}
                 </div>
 
-                <ArrowRight size={16} color="var(--text-muted)" />
+                <ArrowRight size={16} className="text-text-muted shrink-0 hidden sm:block" />
               </div>
             );
           })}

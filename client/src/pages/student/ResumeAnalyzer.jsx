@@ -642,7 +642,7 @@ export default function ResumeAnalyzer() {
             </h1>
           </div>
 
-          <div className="flex items-center gap-2 self-start sm:self-auto">
+          <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
             <button
               onClick={handlePrint}
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-bg-elevated hover:bg-bg-overlay border border-border text-text-primary transition-colors cursor-pointer"
@@ -741,7 +741,7 @@ export default function ResumeAnalyzer() {
         </div>
 
         {/* Interactive View Tabs */}
-        <div className="flex items-center gap-2 border-b border-border pb-2">
+        <div className="flex items-center gap-2 border-b border-border pb-2 overflow-x-auto whitespace-nowrap">
           {[
             { id: 'insights', label: 'Detailed Category Audit', icon: ShieldCheck },
             { id: 'keywords', label: 'Technical Keywords Matrix', icon: Zap },

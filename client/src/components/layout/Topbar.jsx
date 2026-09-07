@@ -1,4 +1,4 @@
-import { Bell, LogOut } from 'lucide-react';
+import { Bell, LogOut, Menu } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { useAuthStore } from '../../store/authStore';
@@ -6,7 +6,7 @@ import { authService } from '../../services/authService';
 import UserAvatar from '../ui/UserAvatar';
 import ThemeToggle from '../ui/ThemeToggle';
 
-const Topbar = ({ title = '' }) => {
+const Topbar = ({ title = '', onMenuClick }) => {
   const { user, clearAuth } = useAuthStore();
   const navigate = useNavigate();
 
@@ -30,11 +30,24 @@ const Topbar = ({ title = '' }) => {
       : '/admin/notifications';
 
   return (
-    <header className="h-14 border-b border-border bg-bg-surface flex items-center px-6 gap-4 shrink-0 sticky top-0 z-10">
+    <header className="h-14 border-b border-border bg-bg-surface flex items-center px-3 sm:px-6 gap-2 sm:gap-4 shrink-0 sticky top-0 z-20">
+      {/* Mobile hamburger menu toggle */}
+      {onMenuClick && (
+        <button
+          type="button"
+          onClick={onMenuClick}
+          className="p-1.5 rounded-lg text-text-muted hover:text-text-primary hover:bg-bg-elevated md:hidden transition-colors cursor-pointer shrink-0"
+          title="Open Navigation"
+          aria-label="Toggle navigation drawer"
+        >
+          <Menu className="w-5 h-5" />
+        </button>
+      )}
+
       {/* Page title */}
-      <div className="flex-1">
+      <div className="flex-1 min-w-0">
         {title && (
-          <h1 className="text-sm font-semibold text-text-primary">{title}</h1>
+          <h1 className="text-sm font-semibold text-text-primary truncate">{title}</h1>
         )}
       </div>
 
